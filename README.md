@@ -1,1 +1,94 @@
-# small-web
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🍦🌼🍡</title>
+  <style>
+    body, html {
+      font-size: 58px;
+      color: #92dced;
+      background-color: #2b3b49;
+    }
+
+    .centered-text {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50vh;
+    }
+
+
+    .movable-img {
+      position: absolute;
+      cursor: pointer;
+    }
+
+    .movable-img.selected {
+      border-color: rgb(154, 189, 203);
+    }
+  </style>
+</head>
+<body>
+    <div class="centered-text">
+        <p>hello kamil</p>
+    </div>
+  <div class="container">
+    <img class="movable-img" src="7.jpg" alt="Movable Image 7" width="400"; height="500";>
+    <img class="movable-img" src="6.jpg" alt="Movable Image 6" width="500"; height="200";>
+    <img class="movable-img" src="5.jpg" alt="Movable Image 5" width="340"; height="500";>
+    <img class="movable-img" src="4.jpg" alt="Movable Image 4" width="300"; height="450";>
+    <img class="movable-img" src="1.jpg" alt="Movable Image 1" width="300"; height="450";>
+    <img class="movable-img" src="2.jpg" alt="Movable Image 2" width="400"; height="550";>
+    <img class="movable-img" src="3.jpg" alt="Movable Image 3" width="400"; height="550";>
+  </div>
+
+  <script>
+    const container = document.querySelector('.container');
+    const movableImages = document.querySelectorAll('.movable-img');
+
+    let selectedImage = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // Add event listeners for mouse events on each movable image
+    movableImages.forEach(img => {
+      img.addEventListener('mousedown', startDragging);
+      img.addEventListener('mouseup', stopDragging);
+      img.addEventListener('mousemove', dragImage);
+    });
+
+    // Function to start dragging the image
+    function startDragging(event) {
+      selectedImage = event.target;
+      selectedImage.classList.add('selected');
+      offsetX = event.clientX - selectedImage.getBoundingClientRect().left;
+      offsetY = event.clientY - selectedImage.getBoundingClientRect().top;
+      
+    }
+
+    // Function to stop dragging the image
+    function stopDragging() {
+      selectedImage = null;
+      offsetX = 0;
+      offsetY = 0;
+      movableImages.forEach(img => img.classList.remove('selected'));
+    }
+
+    // Function to move the selected image with the mouse
+    function dragImage(event) {
+      if (selectedImage) {
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+        selectedImage.style.left = mouseX - offsetX + 'px';
+        selectedImage.style.top = mouseY - offsetY + 'px';
+      }
+    }
+  </script>
+</body>
+</html>
