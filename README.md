@@ -39,6 +39,7 @@
         <p>hello kamil</p>
     </div>
   <div class="container">
+    <img class="movable-img" src="8.jpg" alt="Movable Image 8" width="500"; height="800";>
     <img class="movable-img" src="7.jpg" alt="Movable Image 7" width="400"; height="500";>
     <img class="movable-img" src="6.jpg" alt="Movable Image 6" width="500"; height="200";>
     <img class="movable-img" src="5.jpg" alt="Movable Image 5" width="340"; height="500";>
@@ -61,32 +62,59 @@
       img.addEventListener('mousedown', startDragging);
       img.addEventListener('mouseup', stopDragging);
       img.addEventListener('mousemove', dragImage);
+      img.addEventListener('touchstart', startDragging);
+      img.addEventListener('touchend', stopDragging);
+      img.addEventListener('touchmove', dragImage);
     });
 
     // Function to start dragging the image
     function startDragging(event) {
+      event.preventDefault(); // Prevent default touch behavior
       selectedImage = event.target;
       selectedImage.classList.add('selected');
-      offsetX = event.clientX - selectedImage.getBoundingClientRect().left;
-      offsetY = event.clientY - selectedImage.getBoundingClientRect().top;
-      
+      offsetX = getOffsetX(event);
+      offsetY = getOffsetY(event);
     }
 
     // Function to stop dragging the image
     function stopDragging() {
       selectedImage = null;
       offsetX = 0;
-      offsetY = 0;
+      offsetY = 0; 
       movableImages.forEach(img => img.classList.remove('selected'));
     }
 
-    // Function to move the selected image with the mouse
+    // Function to move the selected image with the mouse or touch
     function dragImage(event) {
       if (selectedImage) {
-        const mouseX = event.clientX;
-        const mouseY = event.clientY;
+        let mouseX, mouseY;
+        if (event.type.startsWith('touch')) {
+          mouseX = event.touches[0].clientX;
+          mouseY = event.touches[0].clientY;
+        } else {
+          mouseX = event.clientX;
+          mouseY = event.clientY;
+        }
         selectedImage.style.left = mouseX - offsetX + 'px';
         selectedImage.style.top = mouseY - offsetY + 'px';
+      }
+    }
+
+    // Helper function to calculate the offset X
+    function getOffsetX(event) {
+      if (event.type.startsWith('touch')) {
+        return event.touches[0].clientX - selectedImage.getBoundingClientRect().left;
+      } else {
+        return event.clientX - selectedImage.getBoundingClientRect().left;
+      }
+    }
+
+    // Helper function to calculate the offset Y
+    function getOffsetY(event) {
+      if (event.type.startsWith('touch')) {
+        return event.touches[0].clientY - selectedImage.getBoundingClientRect().top;
+      } else {
+        return event.clientY - selectedImage.getBoundingClientRect().top;
       }
     }
   </script>
